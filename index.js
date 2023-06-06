@@ -54,23 +54,19 @@ const routes = [
     }
 ];
 
-const getroute = (route,index) =>
-{
-  const travelData = route.stops.map((stop,index,arr) => 
-  (distances.find((travel)=> 
-  (stop === travel.start && arr[index+1] ===travel.end))||0).distance||0);
+const getTotalDistance = (distance)=> distance.reduce((acc,currentValue)=> acc + currentValue , 0)
+
+const findDistance = (route) => route.stops.map((stop,index,arr) => 
+  (distances.find((distance)=> 
+  (stop === distance.start && arr[index+1] 
+        === distance.end))||0).distance||0);
  
-  return getDistance(travelData) ;
-} 
-
-const getDistance = (distance)=> distance.reduce((acc,currentValue)=> acc + currentValue , 0)
-
-const getTotalDistance = (route) =>
+const getFinalDistance = (route) =>
   ({
   ...route ,
-    total : getroute (route)
+    total : getTotalDistance(findDistance(route))
   });
 
-const main = () => console.log(routes.map(getTotalDistance));
+const main = () => console.log(routes.map(getFinalDistance));
   
 main();
