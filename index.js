@@ -50,23 +50,36 @@ const routes = [
     start: "karur",
     end: "madurai",
     stops: ["karur", "trichy", "madurai"],
-
+  },
+ {
+    start: "trichy",
+    end: "chennai",
+    stops: ["trichy", "viluppuram", "chennai"],
+ },
+  {
+    start: "chennai",
+    end: "tirunelveli",
+    stops: ["chennai", "trichy", "tirunelveli"],
   }
 ];
 
-const getTotalDistance = (distance) => distance.reduce((acc, currentValue) => acc + currentValue, 0)
+const getTotalDistance = (data) => data.reduce((acc, currentValue) => acc + currentValue, 0)
 
 const findDistance = (route) => route.stops.map((stop, index, arr) =>
   (distances.find((distance) =>
   (stop === distance.start && arr[index + 1]
-    === distance.end)) || 0).distance || 0);
-
+    === distance.end)||(stop === distance.end && arr[index + 1]
+    === distance.start)) || 0).distance || 0);
+  
 const getFinalDistance = (route) =>
+
 ({
-  ...route,
+  start : route.start,
+  end : route.end,
   total: getTotalDistance(findDistance(route))
 });
 
 const main = () => console.log(routes.map(getFinalDistance));
+
 
 main();
