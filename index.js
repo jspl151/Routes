@@ -65,21 +65,30 @@ const routes = [
 
 const getTotalDistance = (data) => data.reduce((acc, currentValue) => acc + currentValue, 0)
 
-const findDistance = (route) => route.stops.map((stop, index, arr) =>
+const getRouteDistanceFromRoutes = (start, end) => {
+    const findStops = (routes.find((route) =>
+        (route.start === start && route.end === end)) || { stops: 0 }).stops;
+
+    return {
+        distance: findStops ? getTotalDistance(findDistance(findStops)) : 0
+    }
+}
+
+const findDistance = (stops) => stops.map((stop, index, arr) =>
   (distances.find((distance) =>
   (stop === distance.start && arr[index + 1]
     === distance.end)||(stop === distance.end && arr[index + 1]
-    === distance.start)) || 0).distance || 0);
+    === distance.start)) || getRouteDistanceFromRoutes(stop, arr[index + 1])).distance || 0);
   
 const getFinalDistance = (route) =>
 
 ({
   start : route.start,
   end : route.end,
-  total: getTotalDistance(findDistance(route))
+  total: getTotalDistance(findDistance(route.stops))
 });
 
-const main = () => console.log(routes.map(getFinalDistance));
+const main = () => console.table(routes.map(getFinalDistance));
 
 
 main();
