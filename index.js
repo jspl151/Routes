@@ -81,10 +81,8 @@ const findDistance = (stops) => stops.map((stop, index, arr) =>
     === distance.start)) || getRouteDistanceFromRoutes(stop, arr[index + 1])).distance || 0);
   
 const getFinalDistance = (route) =>
-
 ({
-  start : route.start,
-  end : route.end,
+  ...route,
   total: getTotalDistance(findDistance(route.stops))
 });
 
